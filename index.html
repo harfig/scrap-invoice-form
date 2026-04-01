@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scrap Invoice Request — Auditdata</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:    #0F1E35;
+    --blue:    #1A56A0;
+    --blue-lt: #2D7DD2;
+    --blue-bg: #EBF3FC;
+    --coral:   #D94F2B;
+    --coral-lt:#FDF0EC;
+    --green:   #0A7C5C;
+    --green-bg:#E6F5F0;
+    --gray-50: #F8F9FA;
+    --gray-100:#F1F3F5;
+    --gray-200:#E2E6EA;
+    --gray-400:#9CA3AF;
+    --gray-600:#4B5563;
+    --gray-800:#1F2937;
+    --white:   #FFFFFF;
+    --radius:  10px;
+    --shadow:  0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--gray-800);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── Header ─────────────────────────────────────── */
+  .site-header {
+    background: var(--navy);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 56px; position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.2);
+  }
+  .logo { display: flex; align-items: center; gap: 10px; }
+  .logo-mark {
+    width: 30px; height: 30px; background: var(--coral);
+    border-radius: 6px; display: flex; align-items: center;
+    justify-content: center; font-family: 'DM Mono', monospace;
+    font-size: 13px; font-weight: 500; color: white;
+  }
+  .logo-text { font-size: 14px; font-weight: 600; color: white; letter-spacing: 0.02em; }
+  .logo-sub  { font-size: 11px; color: rgba(255,255,255,0.5); font-weight: 300; }
+  .header-badge {
+    font-size: 11px; background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+    padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.15);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ── Hero ────────────────────────────────────────── */
+  .hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a3a6e 100%);
+    padding: 3rem 2rem 2.5rem;
+    text-align: center; color: white;
+    position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  }
+  .hero h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; position: relative; }
+  .hero p  { font-size: 14px; color: rgba(255,255,255,0.6); position: relative; max-width: 480px; margin: 0 auto; }
+  .steps-row {
+    display: flex; justify-content: center; gap: 0;
+    margin-top: 2rem; position: relative;
+  }
+  .step {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; flex: 1; max-width: 160px; position: relative;
+  }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute; top: 14px; left: 60%;
+    width: 80%; height: 1px; background: rgba(255,255,255,0.2);
+  }
+  .step-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--coral); color: white;
+    font-size: 12px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .step-label { font-size: 11px; color: rgba(255,255,255,0.6); text-align: center; line-height: 1.4; }
+
+  /* ── Layout ──────────────────────────────────────── */
+  .main { max-width: 820px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  /* ── Cards ───────────────────────────────────────── */
+  .card {
+    background: var(--white); border-radius: var(--radius);
+    border: 1px solid var(--gray-200); box-shadow: var(--shadow);
+    margin-bottom: 1.25rem; overflow: hidden;
+    animation: fadeUp 0.3s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card:nth-child(2) { animation-delay: 0.05s; }
+  .card:nth-child(3) { animation-delay: 0.10s; }
+  .card:nth-child(4) { animation-delay: 0.15s; }
+
+  .card-header {
+    display: flex; align-items: center; gap: 12px;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--gray-100);
+    background: var(--gray-50);
+  }
+  .card-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .icon-blue   { background: var(--blue-bg); color: var(--blue); }
+  .icon-coral  { background: var(--coral-lt); color: var(--coral); }
+  .icon-green  { background: var(--green-bg); color: var(--green); }
+  .icon-navy   { background: #E8EDF3; color: var(--navy); }
+  .card-title  { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+  .card-desc   { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+  .card-body   { padding: 1.25rem; }
+
+  /* ── Form fields ─────────────────────────────────── */
+  .grid   { display: grid; gap: 12px; }
+  .g2     { grid-template-columns: 1fr 1fr; }
+  .g3     { grid-template-columns: 1fr 1fr 1fr; }
+  .g13    { grid-template-columns: 1fr 3fr; }
+  .field  { display: flex; flex-direction: column; gap: 4px; }
+  label   { font-size: 11px; font-weight: 600; color: var(--gray-600); letter-spacing: 0.04em; text-transform: uppercase; }
+  .req    { color: var(--coral); margin-left: 2px; }
+  input, select, textarea {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; color: var(--gray-800);
+    background: var(--white);
+    border: 1.5px solid var(--gray-200);
+    border-radius: 7px; padding: 8px 11px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    width: 100%;
+  }
+  input:focus, select:focus, textarea:focus {
+    outline: none; border-color: var(--blue-lt);
+    box-shadow: 0 0 0 3px rgba(45,125,210,0.12);
+  }
+  input.err { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(217,79,43,0.1); }
+  textarea  { resize: vertical; min-height: 56px; }
+  .hint     { font-size: 10px; color: var(--gray-400); margin-top: 2px; }
+
+  /* ── Tabs ────────────────────────────────────────── */
+  .tabs { display: flex; border-bottom: 2px solid var(--gray-100); margin-bottom: 1.25rem; }
+  .tab-btn {
+    padding: 10px 20px; font-size: 13px; font-weight: 500;
+    color: var(--gray-400); background: none; border: none;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    margin-bottom: -2px; transition: color 0.15s, border-color 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .tab-btn:hover { color: var(--blue); }
+  .tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* ── Item tables ─────────────────────────────────── */
+  .item-table { width: 100%; border-collapse: collapse; margin-bottom: 8px; }
+  .item-table th {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--gray-400);
+    padding: 6px 8px; text-align: left;
+    background: var(--gray-50); border-bottom: 1px solid var(--gray-200);
+  }
+  .item-table td { padding: 4px 4px; vertical-align: middle; }
+  .item-table input { font-size: 12px; padding: 7px 9px; border-radius: 6px; }
+  .col-no   { width: 90px; }
+  .col-qty  { width: 65px; }
+  .col-price{ width: 95px; }
+  .col-amt  { width: 95px; }
+  .col-del  { width: 36px; }
+  .col-comm { }
+  .amount-display {
+    font-size: 12px; font-weight: 500; color: var(--blue);
+    font-family: 'DM Mono', monospace;
+    background: var(--blue-bg); border-radius: 6px;
+    padding: 7px 9px; display: block; min-height: 33px;
+  }
+  .total-bar {
+    display: flex; justify-content: flex-end; align-items: center;
+    gap: 12px; padding: 10px 4px 4px;
+    border-top: 1px solid var(--gray-200); margin-top: 4px;
+  }
+  .total-label { font-size: 12px; font-weight: 600; color: var(--gray-600); }
+  .total-value {
+    font-size: 16px; font-weight: 600; color: var(--navy);
+    font-family: 'DM Mono', monospace;
+    background: var(--gray-100); padding: 4px 14px;
+    border-radius: 20px;
+  }
+  .add-row-btn {
+    font-size: 12px; color: var(--blue-lt); background: none; border: none;
+    cursor: pointer; padding: 6px 2px; font-family: 'DM Sans', sans-serif;
+    display: inline-flex; align-items: center; gap: 4px; font-weight: 500;
+    transition: color 0.15s;
+  }
+  .add-row-btn:hover { color: var(--blue); }
+  .del-btn {
+    width: 28px; height: 28px; background: none;
+    border: 1px solid var(--gray-200); border-radius: 6px;
+    cursor: pointer; color: var(--gray-400); font-size: 13px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .del-btn:hover { background: var(--coral-lt); border-color: var(--coral); color: var(--coral); }
+  .scrap-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+  .scrap-row input { font-size: 12px; padding: 7px 9px; }
+
+  /* ── Reference fields ────────────────────────────── */
+  .ref-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px; margin-bottom: 1.25rem;
+    padding-bottom: 1.25rem; border-bottom: 1px solid var(--gray-100);
+  }
+
+  /* ── Error banner ────────────────────────────────── */
+  .error-banner {
+    background: var(--coral-lt); border: 1px solid #F4A58A;
+    border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem;
+    font-size: 12px; color: #8B2500; display: none;
+    animation: fadeUp 0.2s ease;
+  }
+  .error-banner strong { display: block; margin-bottom: 4px; }
+
+  /* ── Actions ─────────────────────────────────────── */
+  .actions {
+    display: flex; gap: 10px; margin-top: 1.5rem; align-items: center;
+    position: sticky; bottom: 0; background: var(--gray-50);
+    padding: 1rem 0; border-top: 1px solid var(--gray-200);
+    margin-left: -1.5rem; margin-right: -1.5rem;
+    padding-left: 1.5rem; padding-right: 1.5rem;
+  }
+  .btn-primary {
+    flex: 1; padding: 12px 20px; font-size: 14px; font-weight: 600;
+    background: var(--blue); color: white; border: none;
+    border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s, transform 0.1s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-primary:hover { background: var(--navy); }
+  .btn-primary:active { transform: scale(0.99); }
+  .btn-secondary {
+    padding: 12px 18px; font-size: 13px; font-weight: 500;
+    background: white; color: var(--gray-600);
+    border: 1.5px solid var(--gray-200); border-radius: 8px;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: all 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--gray-400); color: var(--gray-800); }
+
+  /* ── Copy modal ──────────────────────────────────── */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(15,30,53,0.6);
+    z-index: 200; display: none; align-items: center; justify-content: center;
+    padding: 1.5rem; backdrop-filter: blur(4px);
+  }
+  .modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: white; border-radius: 14px; width: 100%; max-width: 640px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.25); overflow: hidden;
+    animation: slideUp 0.25s ease;
+  }
+  @keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+  .modal-header {
+    background: var(--navy); padding: 1.25rem 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-header h3 { font-size: 15px; font-weight: 600; color: white; }
+  .modal-header p  { font-size: 11px; color: rgba(255,255,255,0.5); margin-top: 2px; }
+  .close-btn {
+    background: rgba(255,255,255,0.1); border: none; color: white;
+    width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+    font-size: 16px; display: flex; align-items: center; justify-content: center;
+  }
+  .close-btn:hover { background: rgba(255,255,255,0.2); }
+  .modal-body { padding: 1.25rem 1.5rem; }
+  .prompt-box {
+    background: var(--gray-50); border: 1px solid var(--gray-200);
+    border-radius: 8px; padding: 1rem; font-family: 'DM Mono', monospace;
+    font-size: 11.5px; line-height: 1.7; color: var(--gray-800);
+    max-height: 320px; overflow-y: auto; white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .modal-actions { display: flex; gap: 10px; margin-top: 1rem; }
+  .btn-copy {
+    flex: 1; padding: 11px; font-size: 14px; font-weight: 600;
+    background: var(--blue); color: white; border: none;
+    border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s; display: flex; align-items: center;
+    justify-content: center; gap: 8px;
+  }
+  .btn-copy:hover  { background: var(--navy); }
+  .btn-copy.copied { background: var(--green); }
+  .btn-open-gpt {
+    padding: 11px 16px; font-size: 13px; font-weight: 500;
+    background: #19C37D; color: white; border: none;
+    border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s; white-space: nowrap;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .btn-open-gpt:hover { background: #15A86A; }
+  .instructions {
+    background: var(--blue-bg); border-radius: 8px; padding: 12px 14px;
+    margin-top: 1rem; font-size: 12px; color: var(--blue);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .instructions ol { padding-left: 16px; }
+  .instructions li { margin-bottom: 4px; }
+
+  /* ── Section divider ─────────────────────────────── */
+  .section-divider {
+    font-size: 11px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--gray-400);
+    margin: 1.25rem 0 0.75rem; display: flex; align-items: center; gap: 8px;
+  }
+  .section-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--gray-200);
+  }
+
+  /* ── Responsive ──────────────────────────────────── */
+  @media (max-width: 600px) {
+    .g2, .g3, .g13, .ref-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 22px; }
+    .steps-row { gap: 4px; }
+    .step:not(:last-child)::after { display: none; }
+    .item-table .col-price, .item-table .col-amt { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-mark">AD</div>
+    <div>
+      <div class="logo-text">Auditdata</div>
+      <div class="logo-sub">Support Portal</div>
+    </div>
+  </div>
+  <span class="header-badge">Scrap Invoice Request</span>
+</header>
+
+<!-- Hero -->
+<div class="hero">
+  <h1>Scrap Invoice Request</h1>
+  <p>Fill in the form below, then copy the generated prompt directly into ChatGPT.</p>
+  <div class="steps-row">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-label">Fill in all details</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-label">Click Generate Prompt</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-label">Copy &amp; paste into ChatGPT</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-label">Confirm preview &amp; get PDFs</div>
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+<main class="main">
+  <div id="errorBanner" class="error-banner">
+    <strong>Please fix the following before continuing:</strong>
+    <span id="errorList"></span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('invoice', this)">Invoice Details</button>
+    <button class="tab-btn" onclick="switchTab('breakdown', this)">Breakdown of Items</button>
+  </div>
+
+  <!-- TAB 1: Invoice -->
+  <div id="tab-invoice" class="tab-panel active">
+
+    <!-- Customer -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-blue">👤</div>
+        <div>
+          <div class="card-title">Customer Information</div>
+          <div class="card-desc">Contact details for this request</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="grid g3">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="custName" placeholder="e.g. Nicola Martin">
+          </div>
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="custEmail" placeholder="name@organization.com">
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="custPhone" placeholder="+44 1382 424055">
+            <span class="hint">Include country code</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Invoice Info -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-navy">🏢</div>
+        <div>
+          <div class="card-title">Invoice Information</div>
+          <div class="card-desc">Billing address and RMA reference</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="grid g2" style="margin-bottom:12px;">
+          <div class="field">
+            <label>Company Name <span class="req">*</span></label>
+            <input type="text" id="company" placeholder="e.g. NHS Tayside">
+          </div>
+          <div class="field">
+            <label>RMA # <span class="req">*</span></label>
+            <input type="text" id="rma" placeholder="e.g. 137738" oninput="syncRma()">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:12px;">
+          <label>Invoice Address <span class="req">*</span></label>
+          <input type="text" id="address" placeholder="Street address, department, building">
+        </div>
+        <div class="grid g3" style="margin-bottom:12px;">
+          <div class="field">
+            <label>City <span class="req">*</span></label>
+            <input type="text" id="city" placeholder="City">
+          </div>
+          <div class="field">
+            <label>State / Region</label>
+            <input type="text" id="state" placeholder="Leave blank if N/A">
+          </div>
+          <div class="field">
+            <label>Zip / Postal Code <span class="req">*</span></label>
+            <input type="text" id="zip" placeholder="e.g. DD3 6EA">
+          </div>
+        </div>
+        <div class="field" style="max-width:280px;">
+          <label>Country <span class="req">*</span></label>
+          <input type="text" id="country" placeholder="e.g. United Kingdom">
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Items -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-coral">📦</div>
+        <div>
+          <div class="card-title">Scrap Order Details</div>
+          <div class="card-desc">Add all items being scrapped</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <table class="item-table" id="orderTable">
+          <thead>
+            <tr>
+              <th class="col-no">Item No.</th>
+              <th>Description <span class="req">*</span></th>
+              <th class="col-qty">Qty <span class="req">*</span></th>
+              <th class="col-price">Unit Price <span class="req">*</span></th>
+              <th class="col-amt">Amount</th>
+              <th class="col-del"></th>
+            </tr>
+          </thead>
+          <tbody id="orderRows"></tbody>
+        </table>
+        <div class="total-bar">
+          <span class="total-label">Total Amount</span>
+          <span class="total-value" id="grandTotal">$0.00</span>
+        </div>
+        <button class="add-row-btn" onclick="addOrderRow()">＋ Add item</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- TAB 2: Breakdown -->
+  <div id="tab-breakdown" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-green">🔍</div>
+        <div>
+          <div class="card-title">Breakdown of Items</div>
+          <div class="card-desc">Per-unit condition and comments</div>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="ref-grid">
+          <div class="field">
+            <label>RMA # <span class="req">*</span></label>
+            <input type="text" id="bRma" placeholder="Auto-filled from Invoice tab">
+          </div>
+          <div class="field">
+            <label>Tracking Number <span class="req">*</span></label>
+            <input type="text" id="trackingNum" placeholder="Carrier tracking number">
+          </div>
+          <div class="field">
+            <label>Return Date <span class="req">*</span></label>
+            <input type="date" id="returnDate">
+          </div>
+        </div>
+
+        <div class="section-divider">Item details</div>
+        <table class="item-table" id="breakdownTable">
+          <thead>
+            <tr>
+              <th class="col-no">Item No.</th>
+              <th style="width:200px">Description <span class="req">*</span></th>
+              <th class="col-comm">Comments / Reason for Scrap</th>
+              <th class="col-del"></th>
+            </tr>
+          </thead>
+          <tbody id="breakdownRows"></tbody>
+        </table>
+        <button class="add-row-btn" onclick="addBreakdownRow()">＋ Add item</button>
+
+        <div class="section-divider" style="margin-top:1.5rem;">Total scraps summary</div>
+        <div id="scrapTotals"></div>
+        <button class="add-row-btn" onclick="addScrapTotal()">＋ Add summary row</button>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="actions">
+    <button class="btn-secondary" onclick="clearAll()">Clear all</button>
+    <button class="btn-primary" onclick="generatePrompt()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+      Generate Prompt for ChatGPT
+    </button>
+  </div>
+</main>
+
+<!-- Copy Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3>Your ChatGPT Prompt is Ready</h3>
+        <p>Copy and paste this into your Scrap Invoice GPT</p>
+      </div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="prompt-box" id="promptBox"></div>
+      <div class="modal-actions">
+        <button class="btn-copy" id="copyBtn" onclick="copyPrompt()">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+          Copy to Clipboard
+        </button>
+        <button class="btn-open-gpt" onclick="openGPT()">
+          Open ChatGPT ↗
+        </button>
+      </div>
+      <div class="instructions">
+        <div style="font-size:18px;flex-shrink:0;">💡</div>
+        <ol>
+          <li>Click <strong>Copy to Clipboard</strong> above</li>
+          <li>Click <strong>Open ChatGPT</strong> to go to your Scrap Invoice GPT</li>
+          <li>Paste the prompt and press Enter</li>
+          <li>Review the preview, then reply <strong>"Confirm"</strong> to generate PDFs</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── Config ──────────────────────────────────────────
+  const GPT_URL = 'https://chatgpt.com/g/YOUR-GPT-ID-HERE'; // ← replace with your GPT link
+
+  // ── State ───────────────────────────────────────────
+  let oId = 0, bId = 0, sId = 0;
+
+  // ── Tab switching ────────────────────────────────────
+  function switchTab(tab, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('tab-' + tab).classList.add('active');
+    btn.classList.add('active');
+    if (tab === 'breakdown') syncRma();
+  }
+
+  function syncRma() {
+    const v = document.getElementById('rma').value;
+    const b = document.getElementById('bRma');
+    if (!b._edited) b.value = v;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('bRma').addEventListener('input', function() {
+      this._edited = true;
+    });
+  });
+
+  // ── Order rows ──────────────────────────────────────
+  function addOrderRow() {
+    const id = ++oId;
+    const tr = document.createElement('tr');
+    tr.id = 'or_' + id;
+    tr.innerHTML = `
+      <td><input type="text" id="ino_${id}" placeholder="Item #"></td>
+      <td><input type="text" id="idesc_${id}" placeholder="Description"></td>
+      <td><input type="number" id="qty_${id}" placeholder="0" min="0" oninput="calcRow(${id})"></td>
+      <td><input type="number" id="price_${id}" placeholder="0.00" min="0" step="0.01" oninput="calcRow(${id})"></td>
+      <td><span class="amount-display" id="amt_${id}">—</span></td>
+      <td><button class="del-btn" onclick="removeRow('or_${id}');calcTotal()">✕</button></td>
+    `;
+    document.getElementById('orderRows').appendChild(tr);
+  }
+
+  function calcRow(id) {
+    const q = parseFloat(document.getElementById('qty_' + id).value) || 0;
+    const p = parseFloat(document.getElementById('price_' + id).value) || 0;
+    const a = q * p;
+    document.getElementById('amt_' + id).textContent = a > 0 ? '$' + a.toFixed(2) : '—';
+    calcTotal();
+  }
+
+  function calcTotal() {
+    let t = 0;
+    document.querySelectorAll('[id^="amt_"]').forEach(el => {
+      t += parseFloat(el.textContent.replace('$','')) || 0;
+    });
+    document.getElementById('grandTotal').textContent = '$' + t.toFixed(2);
+  }
+
+  // ── Breakdown rows ──────────────────────────────────
+  function addBreakdownRow() {
+    const id = ++bId;
+    const tr = document.createElement('tr');
+    tr.id = 'br_' + id;
+    tr.innerHTML = `
+      <td><input type="text" id="bno_${id}" placeholder="Item #"></td>
+      <td><input type="text" id="bdesc_${id}" placeholder="Description"></td>
+      <td><textarea id="bcomm_${id}" rows="1" placeholder="Describe the fault or reason for scrap"></textarea></td>
+      <td><button class="del-btn" onclick="removeRow('br_${id}')">✕</button></td>
+    `;
+    document.getElementById('breakdownRows').appendChild(tr);
+  }
+
+  function addScrapTotal() {
+    const id = ++sId;
+    const div = document.createElement('div');
+    div.className = 'scrap-row'; div.id = 'sr_' + id;
+    div.innerHTML = `
+      <input style="width:100px" type="text" id="stno_${id}" placeholder="Item No.">
+      <input style="flex:1" type="text" id="stdesc_${id}" placeholder="Description">
+      <input style="width:80px" type="number" id="stqty_${id}" placeholder="Qty" min="0">
+      <button class="del-btn" onclick="removeRow('sr_${id}')">✕</button>
+    `;
+    document.getElementById('scrapTotals').appendChild(div);
+  }
+
+  function removeRow(id) { const el = document.getElementById(id); if (el) el.remove(); }
+
+  // ── Clear all ───────────────────────────────────────
+  function clearAll() {
+    ['custName','custEmail','custPhone','company','rma','address','city','state',
+     'zip','country','bRma','trackingNum','returnDate'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    ['orderRows','breakdownRows','scrapTotals'].forEach(id => {
+      document.getElementById(id).innerHTML = '';
+    });
+    document.getElementById('grandTotal').textContent = '$0.00';
+    document.getElementById('errorBanner').style.display = 'none';
+    oId = 0; bId = 0; sId = 0;
+  }
+
+  // ── Validation ──────────────────────────────────────
+  function v(id) { const e = document.getElementById(id); return e ? e.value.trim() : ''; }
+
+  function generatePrompt() {
+    const missing = [];
+    [['custName','Name'],['custEmail','Email'],['custPhone','Phone'],
+     ['company','Company name'],['rma','RMA #'],['address','Invoice address'],
+     ['city','City'],['zip','Zip/Postal code'],['country','Country'],
+     ['trackingNum','Tracking number'],['returnDate','Return date']
+    ].forEach(([id, label]) => { if (!v(id)) missing.push(label); });
+
+    const oRows = document.querySelectorAll('#orderRows tr');
+    if (oRows.length === 0) missing.push('At least one scrap order item');
+
+    if (missing.length) {
+      const banner = document.getElementById('errorBanner');
+      document.getElementById('errorList').textContent = missing.join(', ') + '.';
+      banner.style.display = 'block';
+      banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    document.getElementById('errorBanner').style.display = 'none';
+
+    // Build order lines
+    const orderLines = [];
+    oRows.forEach(r => {
+      const inputs = r.querySelectorAll('input');
+      if (inputs.length < 4) return;
+      const qty = parseFloat(inputs[2].value) || 0;
+      const price = parseFloat(inputs[3].value) || 0;
+      if (qty === 0 && price === 0 && !inputs[0].value && !inputs[1].value) return;
+      const amt = (qty * price).toFixed(2);
+      orderLines.push(`Item No. ${inputs[0].value || '—'} | Description: ${inputs[1].value || '—'} | Qty: ${qty} | Unit Price: $${price.toFixed(2)} | Amount: $${amt}`);
+    });
+
+    // Build breakdown lines
+    const bLines = [];
+    document.querySelectorAll('#breakdownRows tr').forEach(r => {
+      const els = r.querySelectorAll('input, textarea');
+      if (els.length < 3) return;
+      bLines.push(`Item No. ${els[0].value || '—'} | Description: ${els[1].value || '—'} | Comments: ${els[2].value || '—'}`);
+    });
+
+    // Build scrap totals
+    const stLines = [];
+    document.querySelectorAll('.scrap-row').forEach(d => {
+      const no = d.querySelector('[id^="stno_"]');
+      const desc = d.querySelector('[id^="stdesc_"]');
+      const qty = d.querySelector('[id^="stqty_"]');
+      if (no) stLines.push(`Item No. ${no.value || '—'} | Description: ${desc ? desc.value : '—'} | Qty: ${qty ? qty.value : '—'}`);
+    });
+
+    const stateVal = v('state') && v('state').toUpperCase() !== 'N/A' ? v('state') : '(not applicable)';
+
+    const prompt = `Process this Scrap Invoice Request and show me a preview before generating the PDFs.
+
+=== CUSTOMER INFORMATION ===
+Name: ${v('custName')}
+Email: ${v('custEmail')}
+Phone: ${v('custPhone')}
+
+=== INVOICE INFORMATION ===
+Company: ${v('company')}
+Invoice Address: ${v('address')}
+City: ${v('city')}
+State: ${stateVal}
+Zip Code: ${v('zip')}
+Country: ${v('country')}
+RMA #: ${v('rma')}
+
+=== SCRAP ORDER DETAILS ===
+${orderLines.length ? orderLines.join('\n') : '(none)'}
+Total Amount: ${document.getElementById('grandTotal').textContent}
+
+=== BREAKDOWN OF ITEMS ===
+RMA #: ${v('bRma') || v('rma')}
+Tracking Number: ${v('trackingNum')}
+Return Date: ${v('returnDate')}
+
+Items:
+${bLines.length ? bLines.join('\n') : '(none provided)'}
+
+Total Scraps:
+${stLines.length ? stLines.join('\n') : '(none provided)'}
+
+---
+Please validate all fields, auto-correct where needed, show the structured preview for confirmation, then generate both PDF files (Scrap ${v('rma')}.pdf and Scrap - Breakdown of Items.pdf) upon my approval.`;
+
+    document.getElementById('promptBox').textContent = prompt;
+    document.getElementById('modalOverlay').classList.add('open');
+    document.getElementById('copyBtn').textContent = 'Copy to Clipboard';
+    document.getElementById('copyBtn').classList.remove('copied');
+  }
+
+  // ── Copy & modal ────────────────────────────────────
+  function copyPrompt() {
+    const text = document.getElementById('promptBox').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('copyBtn');
+      btn.innerHTML = '✓  Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy to Clipboard';
+        btn.classList.remove('copied');
+      }, 3000);
+    });
+  }
+
+  function openGPT() { window.open(GPT_URL, '_blank'); }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+
+  // ── Init ─────────────────────────────────────────────
+  addOrderRow();
+  addBreakdownRow();
+  addScrapTotal();
+</script>
+</body>
+</html>
