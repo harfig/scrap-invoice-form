@@ -1,0 +1,1556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scrap Invoice Request</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:     #0F1E35;
+  --blue:     #1A56A0;
+  --blue-lt:  #2D7DD2;
+  --blue-bg:  #EBF3FC;
+  --coral:    #D94F2B;
+  --coral-lt: #FDF0EC;
+  --green:    #0A7C5C;
+  --green-bg: #E6F5F0;
+  --amber:    #92580A;
+  --amber-bg: #FEF3E2;
+  --gray-50:  #F8F9FA;
+  --gray-100: #F1F3F5;
+  --gray-200: #E2E6EA;
+  --gray-300: #CDD3DA;
+  --gray-400: #9CA3AF;
+  --gray-600: #4B5563;
+  --gray-800: #1F2937;
+  --white:    #FFFFFF;
+  --radius:   10px;
+  --shadow:   0 1px 3px rgba(0,0,0,0.07), 0 4px 16px rgba(0,0,0,0.05);
+}
+*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--gray-50);
+  color: var(--gray-800);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ─── Header ────────────────────────────────────── */
+.site-header {
+  background: var(--navy);
+  padding: 0 1.75rem;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 58px; position: sticky; top: 0; z-index: 100;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.24);
+}
+.logo { display: flex; align-items: center; gap: 10px; }
+.logo-mark {
+  width: 32px; height: 32px; background: var(--coral);
+  border-radius: 7px; display: flex; align-items: center;
+  justify-content: center; font-family: 'DM Mono', monospace;
+  font-size: 10px; font-weight: 500; color: white;
+}
+.logo-text { font-size: 14px; font-weight: 600; color: white; }
+.logo-sub  { font-size: 10.5px; color: rgba(255,255,255,0.4); font-weight: 300; }
+.header-right { display: flex; align-items: center; gap: 10px; }
+.header-badge {
+  font-size: 10.5px; background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.55);
+  padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.12);
+  font-family: 'DM Mono', monospace;
+}
+.cur-picker {
+  display: flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 22px; padding: 5px 6px 5px 13px;
+}
+.cur-picker > span {
+  font-size: 10.5px; font-weight: 600; color: rgba(255,255,255,0.55);
+  letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;
+}
+.cur-select {
+  font-family: 'DM Mono', monospace !important;
+  font-size: 12px !important; font-weight: 500 !important; color: white !important;
+  background: rgba(255,255,255,0.18) !important; border: none !important;
+  border-radius: 14px !important; padding: 4px 10px !important;
+  cursor: pointer !important; width: auto !important;
+  -webkit-appearance: none; appearance: none;
+}
+.cur-select option { color: var(--gray-800); background: white; }
+
+/* ─── Hero ──────────────────────────────────────── */
+.hero {
+  background: linear-gradient(140deg, var(--navy) 0%, #163362 100%);
+  padding: 2.5rem 2rem 2rem;
+  text-align: center; color: white;
+  position: relative; overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+}
+.hero h1 { font-size: 25px; font-weight: 600; margin-bottom: 6px; position: relative; }
+.hero-sub { font-size: 13px; color: rgba(255,255,255,0.5); position: relative; max-width: 440px; margin: 0 auto; }
+.cur-hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 20px; padding: 5px 14px; margin-top: 1rem;
+  font-size: 12px; color: rgba(255,255,255,0.75); position: relative;
+}
+.cur-hero-badge strong { font-family: 'DM Mono', monospace; font-size: 13px; color: white; }
+.cur-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ADE80; flex-shrink: 0; }
+.steps-row {
+  display: flex; justify-content: center;
+  margin-top: 1.75rem; position: relative;
+}
+.step {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 6px; flex: 1; max-width: 145px; position: relative;
+}
+.step:not(:last-child)::after {
+  content: ''; position: absolute; top: 14px; left: 60%;
+  width: 80%; height: 1px; background: rgba(255,255,255,0.15);
+}
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--coral); color: white;
+  font-size: 12px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.step-label { font-size: 11px; color: rgba(255,255,255,0.48); text-align: center; line-height: 1.4; }
+
+/* ─── Layout ────────────────────────────────────── */
+.main { max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem 6.5rem; }
+
+/* ─── Cards ─────────────────────────────────────── */
+.card {
+  background: var(--white); border-radius: var(--radius);
+  border: 1px solid var(--gray-200); box-shadow: var(--shadow);
+  margin-bottom: 1.25rem; overflow: hidden;
+  animation: fadeUp 0.3s ease both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.card:nth-child(2) { animation-delay: 0.05s; }
+.card:nth-child(3) { animation-delay: 0.10s; }
+.card:nth-child(4) { animation-delay: 0.15s; }
+.card-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid var(--gray-100);
+  background: var(--gray-50);
+}
+.card-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; flex-shrink: 0;
+}
+.icon-blue  { background: var(--blue-bg); }
+.icon-coral { background: var(--coral-lt); }
+.icon-green { background: var(--green-bg); }
+.icon-navy  { background: #E8EDF3; }
+.card-title { font-size: 13px; font-weight: 600; color: var(--gray-800); }
+.card-desc  { font-size: 11px; color: var(--gray-400); margin-top: 1px; }
+.card-body  { padding: 1.25rem; }
+
+/* ─── Form fields ───────────────────────────────── */
+.grid  { display: grid; gap: 12px; }
+.g2    { grid-template-columns: 1fr 1fr; }
+.g3    { grid-template-columns: 1fr 1fr 1fr; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+label  {
+  font-size: 10.5px; font-weight: 600; color: var(--gray-600);
+  letter-spacing: 0.05em; text-transform: uppercase;
+  display: flex; align-items: center; gap: 4px;
+}
+.req { color: var(--coral); }
+.opt { font-size: 10px; font-weight: 400; color: var(--gray-400);
+       text-transform: none; letter-spacing: 0; margin-left: 2px; }
+input, select, textarea {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px; color: var(--gray-800);
+  background: var(--white);
+  border: 1.5px solid var(--gray-200);
+  border-radius: 7px; padding: 8px 11px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+input::placeholder, textarea::placeholder { color: var(--gray-300); }
+input:focus, select:focus, textarea:focus {
+  outline: none; border-color: var(--blue-lt);
+  box-shadow: 0 0 0 3px rgba(45,125,210,0.1);
+}
+input.err { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(217,79,43,0.08); }
+textarea  { resize: vertical; min-height: 56px; }
+.hint     { font-size: 10.5px; color: var(--gray-400); margin-top: 1px; }
+
+/* ─── Tabs ──────────────────────────────────────── */
+.tabs { display: flex; border-bottom: 2px solid var(--gray-100); margin-bottom: 1.25rem; }
+.tab-btn {
+  padding: 10px 22px; font-size: 13px; font-weight: 500;
+  color: var(--gray-400); background: none; border: none;
+  cursor: pointer; border-bottom: 2px solid transparent;
+  margin-bottom: -2px; transition: color 0.15s, border-color 0.15s;
+  font-family: 'DM Sans', sans-serif;
+  display: flex; align-items: center; gap: 7px;
+}
+.tab-btn:hover  { color: var(--blue); }
+.tab-btn.active { color: var(--blue); border-bottom-color: var(--blue); }
+.tab-num {
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--blue-bg); color: var(--blue);
+  font-size: 10px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ─── Item tables ───────────────────────────────── */
+.item-table { width: 100%; border-collapse: collapse; margin-bottom: 6px; }
+.item-table th {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--gray-400);
+  padding: 7px 7px; text-align: left;
+  background: var(--gray-50); border-bottom: 1px solid var(--gray-200);
+  white-space: nowrap;
+}
+.item-table td { padding: 3px 3px; vertical-align: middle; }
+.item-table input, .item-table textarea {
+  font-size: 12px; padding: 6px 8px; border-radius: 6px;
+}
+.item-table textarea { min-height: 34px; resize: none; }
+.ci-no    { width: 90px; }
+.ci-desc  { min-width: 130px; }
+.ci-qty   { width: 62px; }
+.ci-price { width: 95px; }
+.ci-amt   { width: 100px; }
+.ci-del   { width: 34px; }
+.cb-no    { width: 85px; }
+.cb-ser   { width: 120px; }
+.cb-desc  { min-width: 120px; }
+.cb-comm  { min-width: 140px; }
+.cb-del   { width: 34px; }
+.amount-display {
+  font-size: 12px; font-weight: 500; color: var(--blue);
+  font-family: 'DM Mono', monospace;
+  background: var(--blue-bg); border-radius: 6px;
+  padding: 6px 8px; display: block; min-height: 32px; line-height: 20px;
+  white-space: nowrap;
+}
+.total-bar {
+  display: flex; justify-content: flex-end; align-items: center;
+  gap: 12px; padding: 10px 4px 4px;
+  border-top: 1px solid var(--gray-200); margin-top: 4px;
+}
+.total-label { font-size: 12px; font-weight: 600; color: var(--gray-600); }
+.total-value {
+  font-size: 16px; font-weight: 600; color: var(--navy);
+  font-family: 'DM Mono', monospace;
+  background: var(--gray-100); padding: 4px 16px; border-radius: 20px;
+}
+.add-row-btn {
+  font-size: 12px; color: var(--blue-lt); background: none; border: none;
+  cursor: pointer; padding: 6px 0; font-family: 'DM Sans', sans-serif;
+  display: inline-flex; align-items: center; gap: 4px; font-weight: 500;
+  transition: color 0.15s;
+}
+.add-row-btn:hover { color: var(--blue); }
+.del-btn {
+  width: 28px; height: 28px; background: none;
+  border: 1px solid var(--gray-200); border-radius: 6px;
+  cursor: pointer; color: var(--gray-400); font-size: 12px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.del-btn:hover { background: var(--coral-lt); border-color: var(--coral); color: var(--coral); }
+
+/* ─── Breakdown helpers ─────────────────────────── */
+.ref-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px; margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem; border-bottom: 1px solid var(--gray-100);
+}
+.section-divider {
+  font-size: 10.5px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--gray-400);
+  margin: 1.25rem 0 0.75rem; display: flex; align-items: center; gap: 8px;
+}
+.section-divider::after { content: ''; flex: 1; height: 1px; background: var(--gray-200); }
+.scrap-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+.scrap-row input { font-size: 12px; padding: 6px 8px; }
+.ser-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--amber-bg); border: 1px solid #F9D49A;
+  border-radius: 7px; padding: 7px 12px; margin-bottom: 1rem;
+  font-size: 12px; color: var(--amber);
+}
+.cur-strip {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--amber-bg); border: 1px solid #F9D49A;
+  border-radius: 8px; padding: 8px 12px; margin-bottom: 1rem;
+  font-size: 12px; color: var(--amber);
+}
+.cur-strip strong { font-family: 'DM Mono', monospace; }
+
+/* ─── Error banner ──────────────────────────────── */
+.error-banner {
+  background: var(--coral-lt); border: 1px solid #F4A58A;
+  border-radius: 8px; padding: 12px 16px; margin-bottom: 1.25rem;
+  font-size: 12px; color: #8B2500; display: none;
+  animation: fadeUp 0.2s ease;
+}
+.error-banner strong { display: block; margin-bottom: 4px; }
+
+/* ─── Fixed actions ─────────────────────────────── */
+.actions {
+  display: flex; justify-content: center;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: rgba(248,249,250,0.96); backdrop-filter: blur(10px);
+  padding: 0.9rem 1.5rem; border-top: 1px solid var(--gray-200); z-index: 50;
+}
+.actions-inner { display: flex; gap: 10px; width: 100%; max-width: 960px; }
+.btn-primary {
+  flex: 1; padding: 11px 20px; font-size: 14px; font-weight: 600;
+  background: var(--blue); color: white; border: none;
+  border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s, transform 0.1s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-primary:hover  { background: var(--navy); }
+.btn-primary:active { transform: scale(0.99); }
+.btn-secondary {
+  padding: 11px 18px; font-size: 13px; font-weight: 500;
+  background: white; color: var(--gray-600);
+  border: 1.5px solid var(--gray-200); border-radius: 8px;
+  cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: all 0.15s; white-space: nowrap;
+}
+.btn-secondary:hover { border-color: var(--gray-400); color: var(--gray-800); }
+
+/* ─── Validation Modal ──────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(15,30,53,0.55);
+  z-index: 200; display: none; align-items: flex-start; justify-content: center;
+  padding: 1.5rem; backdrop-filter: blur(4px); overflow-y: auto;
+}
+.modal-overlay.open { display: flex; animation: fadeIn 0.2s ease; }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+.modal {
+  background: white; border-radius: 14px; width: 100%; max-width: 760px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.22); overflow: hidden;
+  animation: slideUp 0.25s ease; margin: auto;
+}
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity:0; }
+  to   { transform: translateY(0);    opacity:1; }
+}
+.modal-header {
+  background: var(--navy); padding: 1.25rem 1.5rem;
+  display: flex; align-items: flex-start; justify-content: space-between;
+}
+.modal-header h3 { font-size: 15px; font-weight: 600; color: white; }
+.modal-header p  { font-size: 11.5px; color: rgba(255,255,255,0.45); margin-top: 3px; }
+.close-btn {
+  background: rgba(255,255,255,0.1); border: none; color: white;
+  width: 28px; height: 28px; border-radius: 6px; cursor: pointer;
+  font-size: 14px; display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-left: 12px;
+}
+.close-btn:hover { background: rgba(255,255,255,0.2); }
+.modal-body { padding: 1.25rem 1.5rem; }
+.modal-actions { display: flex; gap: 10px; margin-top: 1.25rem; }
+.btn-print {
+  flex: 1; padding: 11px; font-size: 13.5px; font-weight: 600;
+  background: var(--green); color: white; border: none;
+  border-radius: 8px; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.btn-print:hover { background: #085e46; }
+.btn-cancel {
+  padding: 11px 18px; font-size: 13px; font-weight: 500;
+  background: white; color: var(--gray-600);
+  border: 1.5px solid var(--gray-200); border-radius: 8px;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; white-space: nowrap;
+}
+
+/* ─── Validation sections ───────────────────────── */
+.val-section { margin-bottom: 1rem; }
+.val-section-title {
+  font-size: 10.5px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--gray-600);
+  margin-bottom: 0.5rem; padding-bottom: 4px;
+  border-bottom: 1px solid var(--gray-100);
+}
+.val-item {
+  display: flex; align-items: flex-start; gap: 8px;
+  font-size: 12px; padding: 4px 0; line-height: 1.5;
+}
+.val-ok   { color: var(--green); }
+.val-warn { color: var(--amber); }
+.val-err  { color: var(--coral); }
+.val-badge {
+  font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.badge-ok   { background: var(--green-bg); color: var(--green); }
+.badge-warn { background: var(--amber-bg); color: var(--amber); }
+.badge-err  { background: var(--coral-lt); color: var(--coral); }
+
+/* Preview table */
+.preview-table {
+  width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 6px;
+}
+.preview-table th {
+  background: var(--gray-50); font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.05em; color: var(--gray-400);
+  padding: 6px 10px; text-align: left; border-bottom: 1px solid var(--gray-200);
+}
+.preview-table td {
+  padding: 6px 10px; border-bottom: 1px solid var(--gray-100);
+  color: var(--gray-800);
+}
+.preview-table tr:last-child td { border-bottom: none; }
+.preview-kv { display: grid; grid-template-columns: 140px 1fr; gap: 4px 12px; font-size: 12px; }
+.preview-kv dt { color: var(--gray-400); font-weight: 500; }
+.preview-kv dd { color: var(--gray-800); font-weight: 500; }
+.preview-total-row td { font-weight: 700; background: var(--gray-50); }
+.has-warnings {
+  background: var(--amber-bg); border: 1px solid #F9D49A;
+  border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem;
+  font-size: 12px; color: var(--amber);
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.all-good {
+  background: var(--green-bg); border: 1px solid #A7D9C8;
+  border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem;
+  font-size: 12px; color: var(--green);
+  display: flex; gap: 8px; align-items: center;
+}
+
+/* ─── Responsive ────────────────────────────────── */
+@media (max-width: 640px) {
+  .g2, .g3, .ref-grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 21px; }
+  .step:not(:last-child)::after { display: none; }
+  .header-badge { display: none; }
+  .cur-picker > span { display: none; }
+  .ci-price, .ci-amt { display: none; }
+}
+
+/* ═══════════════════════════════════════════════════
+   PRINT STYLES — PDF Output
+═══════════════════════════════════════════════════ */
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+  /* Hide everything except the print container */
+  body > *:not(#printContainer) { display: none !important; }
+  #printContainer { display: block !important; }
+
+  .print-page {
+    width: 210mm;
+    padding: 18mm 18mm 22mm;
+    background: white;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 9pt;
+    color: #1a1a1a;
+    position: relative;
+    page-break-inside: avoid;
+  }
+  .print-page:first-child {
+    page-break-after: always;
+    break-after: page;
+  }
+  .print-page:last-child {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+}
+
+/* ─── Print container (hidden on screen) ─────── */
+#printContainer { display: none; }
+
+/* Print page layout */
+.print-page {
+  width: 210mm;
+  padding: 18mm 18mm 22mm;
+  background: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 9pt;
+  color: #1a1a1a;
+  box-sizing: border-box;
+}
+
+/* Print header */
+.p-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 3px solid #D94F2B;
+  margin-bottom: 16px;
+}
+.p-logo-wrap { display: flex; align-items: center; gap: 10px; }
+.p-logo-mark {
+  width: 36px; height: 36px; background: #D94F2B;
+  border-radius: 6px; display: flex; align-items: center;
+  justify-content: center; font-size: 10pt; font-weight: 700;
+  color: white; font-family: 'Courier New', monospace; flex-shrink: 0;
+}
+.p-logo-name {
+  font-size: 16pt; font-weight: 700; color: #0F1E35;
+  letter-spacing: -0.3px; line-height: 1;
+}
+.p-header-right { text-align: right; }
+.p-doc-title {
+  font-size: 13pt; font-weight: 700; color: #0F1E35;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+.p-rma-badge {
+  font-size: 8.5pt; color: #6b7280; margin-top: 3px;
+  font-family: 'Courier New', monospace;
+}
+.p-rma-badge strong { color: #0F1E35; font-size: 9pt; }
+
+/* Section headers */
+.p-section-title {
+  font-size: 7.5pt; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: #6b7280;
+  background: #f3f4f6; padding: 5px 8px;
+  border-left: 3px solid #D94F2B;
+  margin-bottom: 8px; margin-top: 14px;
+}
+
+/* Info grid */
+.p-info-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; margin-bottom: 4px;
+}
+.p-info-grid.p-cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+.p-info-block { padding: 5px 8px 5px 0; }
+.p-info-label {
+  font-size: 6.5pt; text-transform: uppercase; letter-spacing: 0.06em;
+  color: #9ca3af; font-weight: 700; margin-bottom: 2px;
+}
+.p-info-value { font-size: 9pt; color: #1f2937; font-weight: 500; word-break: break-word; }
+
+/* Tables */
+.p-table {
+  width: 100%; border-collapse: collapse;
+  margin-top: 6px; margin-bottom: 4px;
+}
+.p-table th {
+  background: #0F1E35; color: white;
+  font-size: 7pt; text-transform: uppercase;
+  letter-spacing: 0.06em; font-weight: 700;
+  padding: 6px 8px; text-align: left; border: none;
+}
+.p-table td {
+  font-size: 8.5pt; padding: 5px 8px;
+  border-bottom: 1px solid #e5e7eb; color: #1f2937;
+  vertical-align: top;
+}
+.p-table tr:nth-child(even) td { background: #f9fafb; }
+.p-table .td-right { text-align: right; font-family: 'Courier New', monospace; }
+.p-total-row td {
+  background: #0F1E35 !important; color: white;
+  font-weight: 700; font-size: 9pt;
+  border-top: 2px solid #D94F2B;
+}
+.p-total-row .td-right {
+  font-family: 'Courier New', monospace;
+  font-size: 10pt;
+}
+
+/* Footer */
+.p-footer {
+  position: absolute; bottom: 12mm; left: 18mm; right: 18mm;
+  border-top: 1px solid #e5e7eb; padding-top: 6px;
+  display: flex; justify-content: space-between;
+  font-size: 7pt; color: #9ca3af;
+}
+
+/* Return reference boxes */
+.p-ref-boxes {
+  display: grid; grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px; margin-bottom: 12px;
+}
+.p-ref-box {
+  border: 1.5px solid #e5e7eb; border-radius: 5px;
+  padding: 8px 10px; background: #f9fafb;
+}
+.p-ref-label {
+  font-size: 6.5pt; text-transform: uppercase; letter-spacing: 0.06em;
+  color: #9ca3af; font-weight: 700; margin-bottom: 3px;
+}
+.p-ref-value { font-size: 9.5pt; color: #0F1E35; font-weight: 600; font-family: 'Courier New', monospace; }
+</style>
+</head>
+<body>
+
+<!-- ── Header ───────────────────────────────────── -->
+<header class="site-header">
+  <div class="logo">
+    <div class="logo-mark">SIR</div>
+    <div>
+      <div class="logo-text">Scrap Invoice Request</div>
+      <div class="logo-sub">Auditdata</div>
+    </div>
+  </div>
+  <div class="header-right">
+    <div class="cur-picker">
+      <span>Currency</span>
+      <select class="cur-select" id="currencySelect" onchange="updateCurrency()">
+        <option value="USD" selected>USD — $</option>
+        <option value="EUR">EUR — €</option>
+        <option value="GBP">GBP — £</option>
+        <option value="CAD">CAD — CA$</option>
+        <option value="DKK">DKK — kr</option>
+      </select>
+    </div>
+    <span class="header-badge">v4.0</span>
+  </div>
+</header>
+
+<!-- ── Hero ─────────────────────────────────────── -->
+<div class="hero">
+  <h1>Scrap Invoice Request Form</h1>
+  <p class="hero-sub">Fill in all required fields, validate, and print directly to PDF — no external tools needed.</p>
+  <div class="cur-hero-badge">
+    <div class="cur-dot"></div>
+    Currency: <strong id="heroCurLabel">USD — US Dollar ($)</strong>
+  </div>
+  <div class="steps-row">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-label">Choose currency &amp; fill invoice details</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-label">Add breakdown &amp; serial numbers</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-label">Click Validate &amp; Preview</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-label">Confirm &amp; Print PDF</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main ─────────────────────────────────────── -->
+<main class="main">
+
+  <div id="errorBanner" class="error-banner">
+    <strong>Please complete the following required fields before continuing:</strong>
+    <span id="errorList"></span>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('invoice', this)">
+      Invoice Details <span class="tab-num">1</span>
+    </button>
+    <button class="tab-btn" onclick="switchTab('breakdown', this)">
+      Breakdown of Items <span class="tab-num">2</span>
+    </button>
+  </div>
+
+  <!-- ══ TAB 1: Invoice ══════════════════════════ -->
+  <div id="tab-invoice" class="tab-panel active">
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-blue">👤</div>
+        <div>
+          <div class="card-title">Customer Information</div>
+          <div class="card-desc">Primary contact details for this scrap request</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="grid g3">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" id="custName" placeholder="Enter full name">
+          </div>
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" id="custEmail" placeholder="Enter email address">
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" id="custPhone" placeholder="e.g. +63 912 345 6789">
+            <span class="hint">Include country code, e.g. +44 1234 567890</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-navy">🏢</div>
+        <div>
+          <div class="card-title">Invoice Information</div>
+          <div class="card-desc">Billing company and address details</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="grid g2" style="margin-bottom:12px;">
+          <div class="field">
+            <label>Company Name <span class="req">*</span></label>
+            <input type="text" id="company" placeholder="Enter company or organisation name">
+          </div>
+          <div class="field">
+            <label>RMA Number <span class="req">*</span></label>
+            <input type="text" id="rma" placeholder="Enter RMA number" oninput="syncRma()">
+          </div>
+        </div>
+        <div class="field" style="margin-bottom:12px;">
+          <label>Invoice Address <span class="req">*</span></label>
+          <input type="text" id="address" placeholder="Street address, department or building name">
+        </div>
+        <div class="grid g3" style="margin-bottom:12px;">
+          <div class="field">
+            <label>City <span class="req">*</span></label>
+            <input type="text" id="city" placeholder="Enter city">
+          </div>
+          <div class="field">
+            <label>State / Region <span class="opt">(optional)</span></label>
+            <input type="text" id="state" placeholder="If applicable">
+          </div>
+          <div class="field">
+            <label>Zip / Postal Code <span class="req">*</span></label>
+            <input type="text" id="zip" placeholder="Enter postal code">
+          </div>
+        </div>
+        <div class="field" style="max-width:260px;">
+          <label>Country <span class="req">*</span></label>
+          <input type="text" id="country" placeholder="Enter country">
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-coral">📦</div>
+        <div>
+          <div class="card-title">Scrap Order Details</div>
+          <div class="card-desc">Add each item being submitted — at least one required</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="cur-strip">
+          <span>💱</span>
+          <span>Amounts are in <strong id="curStripLabel">USD — US Dollar ($)</strong>. Use the currency selector in the top-right to change.</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="item-table">
+            <thead>
+              <tr>
+                <th class="ci-no">Item No.</th>
+                <th class="ci-desc">Description <span class="req">*</span></th>
+                <th class="ci-qty">Qty <span class="req">*</span></th>
+                <th class="ci-price">Unit Price <span class="req">*</span></th>
+                <th class="ci-amt">Amount</th>
+                <th class="ci-del"></th>
+              </tr>
+            </thead>
+            <tbody id="orderRows"></tbody>
+          </table>
+        </div>
+        <div class="total-bar">
+          <span class="total-label">Total Amount</span>
+          <span class="total-value" id="grandTotal">—</span>
+        </div>
+        <button class="add-row-btn" onclick="addOrderRow()">＋ Add another item</button>
+      </div>
+    </div>
+
+  </div><!-- /tab-invoice -->
+
+  <!-- ══ TAB 2: Breakdown ════════════════════════ -->
+  <div id="tab-breakdown" class="tab-panel">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-icon icon-green">🔍</div>
+        <div>
+          <div class="card-title">Breakdown of Items</div>
+          <div class="card-desc">Per-unit serial numbers, condition, faults and return reference</div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="ref-grid">
+          <div class="field">
+            <label>RMA Number <span class="req">*</span></label>
+            <input type="text" id="bRma" placeholder="Enter RMA number">
+            <span class="hint">Auto-filled from Invoice tab</span>
+          </div>
+          <div class="field">
+            <label>Tracking Number <span class="req">*</span></label>
+            <input type="text" id="trackingNum" placeholder="Carrier tracking number">
+          </div>
+          <div class="field">
+            <label>Return Date <span class="req">*</span></label>
+            <input type="date" id="returnDate">
+          </div>
+        </div>
+
+        <div class="section-divider">Item details — serial numbers required per unit</div>
+        <div class="ser-badge">
+          🔑 &nbsp;Enter the unique serial number for each individual unit being scrapped
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="item-table">
+            <thead>
+              <tr>
+                <th class="cb-no">Item No.</th>
+                <th class="cb-ser">Serial No. <span class="req">*</span></th>
+                <th class="cb-desc">Description <span class="req">*</span></th>
+                <th class="cb-comm">Comments / Reason for Scrap</th>
+                <th class="cb-del"></th>
+              </tr>
+            </thead>
+            <tbody id="breakdownRows"></tbody>
+          </table>
+        </div>
+        <button class="add-row-btn" onclick="addBreakdownRow()">＋ Add another item</button>
+
+        <div class="section-divider" style="margin-top:1.5rem;">Total scraps summary</div>
+        <div id="scrapTotals"></div>
+        <button class="add-row-btn" onclick="addScrapTotal()">＋ Add summary row</button>
+
+      </div>
+    </div>
+  </div><!-- /tab-breakdown -->
+
+</main>
+
+<!-- ── Fixed action bar ──────────────────────────── -->
+<div class="actions">
+  <div class="actions-inner">
+    <button class="btn-secondary" onclick="clearAll()">Clear all</button>
+    <button class="btn-primary" onclick="validateAndPreview()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      Validate &amp; Preview PDF
+    </button>
+  </div>
+</div>
+
+<!-- ── Validation / Preview Modal ───────────────── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 id="modalTitle">Validation &amp; Preview</h3>
+        <p id="modalSubtitle">Review the validation results and structured preview before printing</p>
+      </div>
+      <button class="close-btn" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PRINT CONTAINER — 2-page PDF output
+═══════════════════════════════════════════════ -->
+<div id="printContainer">
+
+  <!-- PAGE 1: SCRAP INVOICE -->
+  <div class="print-page" id="printPage1">
+    <div class="p-header">
+      <div class="p-logo-wrap">
+        <div class="p-logo-mark">AD</div>
+        <div class="p-logo-name">Auditdata</div>
+      </div>
+      <div class="p-header-right">
+        <div class="p-doc-title">Scrap Invoice</div>
+        <div class="p-rma-badge">RMA # <strong id="pr1-rma">—</strong></div>
+      </div>
+    </div>
+
+    <div class="p-section-title">Customer Information</div>
+    <div class="p-info-grid">
+      <div class="p-info-block">
+        <div class="p-info-label">Full Name</div>
+        <div class="p-info-value" id="pr1-name">—</div>
+      </div>
+      <div class="p-info-block">
+        <div class="p-info-label">Email Address</div>
+        <div class="p-info-value" id="pr1-email">—</div>
+      </div>
+      <div class="p-info-block" style="margin-top:6px;">
+        <div class="p-info-label">Phone Number</div>
+        <div class="p-info-value" id="pr1-phone">—</div>
+      </div>
+    </div>
+
+    <div class="p-section-title">Invoice Information</div>
+    <div class="p-info-grid">
+      <div class="p-info-block">
+        <div class="p-info-label">Company Name</div>
+        <div class="p-info-value" id="pr1-company">—</div>
+      </div>
+      <div class="p-info-block">
+        <div class="p-info-label">RMA #</div>
+        <div class="p-info-value" id="pr1-rma2">—</div>
+      </div>
+      <div class="p-info-block" style="margin-top:6px; grid-column: 1 / -1;">
+        <div class="p-info-label">Invoice Address</div>
+        <div class="p-info-value" id="pr1-address">—</div>
+      </div>
+    </div>
+    <div class="p-info-grid p-cols-3" style="margin-top:4px;">
+      <div class="p-info-block">
+        <div class="p-info-label">City</div>
+        <div class="p-info-value" id="pr1-city">—</div>
+      </div>
+      <div class="p-info-block">
+        <div class="p-info-label">State / Region</div>
+        <div class="p-info-value" id="pr1-state">—</div>
+      </div>
+      <div class="p-info-block">
+        <div class="p-info-label">Zip / Postal Code</div>
+        <div class="p-info-value" id="pr1-zip">—</div>
+      </div>
+      <div class="p-info-block" style="margin-top:4px;">
+        <div class="p-info-label">Country</div>
+        <div class="p-info-value" id="pr1-country">—</div>
+      </div>
+    </div>
+
+    <div class="p-section-title">Scrap Order Details</div>
+    <table class="p-table">
+      <thead>
+        <tr>
+          <th style="width:90px;">Item No.</th>
+          <th>Description</th>
+          <th style="width:50px; text-align:center;">Qty</th>
+          <th style="width:90px; text-align:right;">Unit Price</th>
+          <th style="width:90px; text-align:right;">Amount</th>
+        </tr>
+      </thead>
+      <tbody id="pr1-items"></tbody>
+      <tfoot>
+        <tr class="p-total-row">
+          <td colspan="4" style="text-align:right; font-size:8pt; letter-spacing:0.05em;">TOTAL AMOUNT</td>
+          <td class="td-right" id="pr1-total">—</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="p-footer">
+      <span>Generated by Auditdata — <span id="pr1-date"></span></span>
+      <span>Page 1 of 2</span>
+    </div>
+  </div>
+
+  <!-- PAGE 2: BREAKDOWN OF ITEMS -->
+  <div class="print-page" id="printPage2">
+    <div class="p-header">
+      <div class="p-logo-wrap">
+        <div class="p-logo-mark">AD</div>
+        <div class="p-logo-name">Auditdata</div>
+      </div>
+      <div class="p-header-right">
+        <div class="p-doc-title">Breakdown of Items</div>
+        <div class="p-rma-badge">RMA # <strong id="pr2-rma">—</strong></div>
+      </div>
+    </div>
+
+    <div class="p-section-title">Return Reference</div>
+    <div class="p-ref-boxes">
+      <div class="p-ref-box">
+        <div class="p-ref-label">RMA #</div>
+        <div class="p-ref-value" id="pr2-rma2">—</div>
+      </div>
+      <div class="p-ref-box">
+        <div class="p-ref-label">Tracking Number</div>
+        <div class="p-ref-value" id="pr2-tracking">—</div>
+      </div>
+      <div class="p-ref-box">
+        <div class="p-ref-label">Return Date</div>
+        <div class="p-ref-value" id="pr2-date">—</div>
+      </div>
+    </div>
+
+    <div class="p-section-title">Item Details</div>
+    <table class="p-table">
+      <thead>
+        <tr>
+          <th style="width:80px;">Item No.</th>
+          <th style="width:110px;">Serial No.</th>
+          <th>Description</th>
+          <th>Comments / Reason for Scrap</th>
+        </tr>
+      </thead>
+      <tbody id="pr2-items"></tbody>
+    </table>
+
+    <div class="p-section-title" style="margin-top:20px;">Total Scraps Summary</div>
+    <table class="p-table">
+      <thead>
+        <tr>
+          <th style="width:90px;">Item No.</th>
+          <th>Description</th>
+          <th style="width:60px; text-align:center;">Qty</th>
+        </tr>
+      </thead>
+      <tbody id="pr2-totals"></tbody>
+    </table>
+
+    <div class="p-footer">
+      <span>Generated by Auditdata — <span id="pr2-date-footer"></span></span>
+      <span>Page 2 of 2</span>
+    </div>
+  </div>
+
+</div><!-- /printContainer -->
+
+<script>
+/* ═══════════════════════════════════════════════════
+   CONFIG & CURRENCY
+═══════════════════════════════════════════════════ */
+const CURRENCIES = {
+  USD: { sym: '$',   name: 'US Dollar',      label: 'USD — US Dollar ($)' },
+  EUR: { sym: '€',   name: 'Euro',            label: 'EUR — Euro (€)' },
+  GBP: { sym: '£',   name: 'British Pound',   label: 'GBP — British Pound (£)' },
+  CAD: { sym: 'CA$', name: 'Canadian Dollar', label: 'CAD — Canadian Dollar (CA$)' },
+  DKK: { sym: 'kr',  name: 'Danish Krone',    label: 'DKK — Danish Krone (kr)' },
+};
+let activeCur = 'USD';
+function getCur() { return CURRENCIES[activeCur]; }
+function fmt(n)   { return n > 0 ? getCur().sym + n.toFixed(2) : '—'; }
+
+function updateCurrency() {
+  const sel = document.getElementById('currencySelect');
+  activeCur = sel.value;
+  const cur = getCur();
+  document.getElementById('heroCurLabel').textContent  = cur.label;
+  document.getElementById('curStripLabel').textContent = cur.label;
+  recalcAll();
+}
+function recalcAll() {
+  document.querySelectorAll('[id^="qty_"]').forEach(el => {
+    calcRow(el.id.replace('qty_', ''));
+  });
+}
+
+/* ═══════════════════════════════════════════════════
+   STATE & ROW COUNTERS
+═══════════════════════════════════════════════════ */
+let oId = 0, bId = 0, sId = 0;
+
+/* ═══════════════════════════════════════════════════
+   TAB SWITCHING
+═══════════════════════════════════════════════════ */
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab === 'breakdown') syncRma();
+}
+function syncRma() {
+  const rmaVal = document.getElementById('rma').value;
+  const bEl    = document.getElementById('bRma');
+  if (!bEl._edited) bEl.value = rmaVal;
+}
+
+/* ═══════════════════════════════════════════════════
+   ORDER ROWS
+═══════════════════════════════════════════════════ */
+function addOrderRow() {
+  const id = ++oId;
+  const tr = document.createElement('tr');
+  tr.id = 'or_' + id;
+  tr.innerHTML = `
+    <td class="ci-no"><input type="text" id="ino_${id}" placeholder="e.g. 90.3008"></td>
+    <td class="ci-desc"><input type="text" id="idesc_${id}" placeholder="Item description"></td>
+    <td class="ci-qty"><input type="number" id="qty_${id}" placeholder="0" min="0" oninput="calcRow(${id})"></td>
+    <td class="ci-price"><input type="number" id="price_${id}" placeholder="0.00" min="0" step="0.01" oninput="calcRow(${id})"></td>
+    <td class="ci-amt"><span class="amount-display" id="amt_${id}">—</span></td>
+    <td class="ci-del"><button class="del-btn" title="Remove row" onclick="removeRow('or_${id}');calcTotal()">✕</button></td>
+  `;
+  document.getElementById('orderRows').appendChild(tr);
+}
+function calcRow(id) {
+  const q  = parseFloat(document.getElementById('qty_'  + id)?.value) || 0;
+  const p  = parseFloat(document.getElementById('price_'+ id)?.value) || 0;
+  const el = document.getElementById('amt_' + id);
+  if (el) el.textContent = fmt(q * p);
+  calcTotal();
+}
+function calcTotal() {
+  let t = 0;
+  document.querySelectorAll('[id^="amt_"]').forEach(el => {
+    const raw = el.textContent.replace(/[^0-9.]/g, '');
+    t += parseFloat(raw) || 0;
+  });
+  document.getElementById('grandTotal').textContent = fmt(t);
+}
+
+/* ═══════════════════════════════════════════════════
+   BREAKDOWN ROWS
+═══════════════════════════════════════════════════ */
+function addBreakdownRow() {
+  const id = ++bId;
+  const tr = document.createElement('tr');
+  tr.id = 'br_' + id;
+  tr.innerHTML = `
+    <td class="cb-no"><input type="text" id="bno_${id}" placeholder="Item No."></td>
+    <td class="cb-ser"><input type="text" id="bser_${id}" placeholder="Serial number" style="font-family:'DM Mono',monospace;font-size:11.5px;"></td>
+    <td class="cb-desc"><input type="text" id="bdesc_${id}" placeholder="Description"></td>
+    <td class="cb-comm"><textarea id="bcomm_${id}" rows="1" placeholder="Fault or reason for scrap"></textarea></td>
+    <td class="cb-del"><button class="del-btn" title="Remove row" onclick="removeRow('br_${id}')">✕</button></td>
+  `;
+  document.getElementById('breakdownRows').appendChild(tr);
+}
+
+/* ═══════════════════════════════════════════════════
+   SCRAP TOTAL ROWS
+═══════════════════════════════════════════════════ */
+function addScrapTotal() {
+  const id = ++sId;
+  const div = document.createElement('div');
+  div.className = 'scrap-row'; div.id = 'sr_' + id;
+  div.innerHTML = `
+    <input style="width:105px" type="text"   id="stno_${id}"   placeholder="Item No.">
+    <input style="flex:1"      type="text"   id="stdesc_${id}" placeholder="Description">
+    <input style="width:80px"  type="number" id="stqty_${id}"  placeholder="Qty" min="0">
+    <button class="del-btn" title="Remove" onclick="removeRow('sr_${id}')">✕</button>
+  `;
+  document.getElementById('scrapTotals').appendChild(div);
+}
+
+function removeRow(id) { document.getElementById(id)?.remove(); }
+
+/* ═══════════════════════════════════════════════════
+   CLEAR ALL
+═══════════════════════════════════════════════════ */
+function clearAll() {
+  if (!confirm('Clear all fields? This cannot be undone.')) return;
+  ['custName','custEmail','custPhone','company','rma','address','city',
+   'state','zip','country','bRma','trackingNum','returnDate'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) { el.value = ''; el._edited = false; }
+  });
+  ['orderRows','breakdownRows','scrapTotals'].forEach(id => {
+    document.getElementById(id).innerHTML = '';
+  });
+  document.getElementById('grandTotal').textContent = '—';
+  document.getElementById('errorBanner').style.display = 'none';
+  oId = 0; bId = 0; sId = 0;
+  addOrderRow(); addBreakdownRow(); addScrapTotal();
+}
+
+/* ═══════════════════════════════════════════════════
+   HELPERS
+═══════════════════════════════════════════════════ */
+function v(id) { return (document.getElementById(id)?.value || '').trim(); }
+
+function isValidEmail(email) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  if (isNaN(d)) return dateStr;
+  return d.toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' });
+}
+
+function todayFormatted() {
+  return new Date().toLocaleDateString('en-GB', { day:'2-digit', month:'long', year:'numeric' });
+}
+
+/* ═══════════════════════════════════════════════════
+   VALIDATION ENGINE
+═══════════════════════════════════════════════════ */
+function runValidation() {
+  const issues = [];
+  const warnings = [];
+  const corrections = [];
+
+  const cur = getCur();
+  const sym = cur.sym;
+
+  // ── Customer Info ──────────────────────────────
+  const name  = v('custName');
+  const email = v('custEmail');
+  const phone = v('custPhone');
+
+  if (!name)  issues.push({ field: 'Full Name',      msg: 'Required — cannot be empty' });
+  if (!email) issues.push({ field: 'Email Address',  msg: 'Required — cannot be empty' });
+  else if (!isValidEmail(email)) issues.push({ field: 'Email Address', msg: `"${email}" is not a valid email format` });
+
+  if (!phone) {
+    issues.push({ field: 'Phone Number', msg: 'Required — cannot be empty' });
+  } else if (!phone.startsWith('+')) {
+    warnings.push({ field: 'Phone Number', msg: `Missing country code — consider adding +[country code] before the number` });
+  }
+
+  // ── Invoice Info ───────────────────────────────
+  const company = v('company');
+  const rma     = v('rma');
+  const address = v('address');
+  const city    = v('city');
+  const zip     = v('zip');
+  const country = v('country');
+
+  if (!company) issues.push({ field: 'Company Name',    msg: 'Required — cannot be empty' });
+  if (!rma)     issues.push({ field: 'RMA Number',      msg: 'Required — cannot be empty' });
+  if (!address) issues.push({ field: 'Invoice Address', msg: 'Required — cannot be empty' });
+  if (!city)    issues.push({ field: 'City',            msg: 'Required — cannot be empty' });
+  if (!zip)     issues.push({ field: 'Zip / Postal Code', msg: 'Required — cannot be empty' });
+  if (!country) issues.push({ field: 'Country',         msg: 'Required — cannot be empty' });
+
+  // ZIP format check
+  if (zip && country) {
+    const c = country.toLowerCase();
+    if ((c.includes('philip') || c === 'ph') && !/^\d{4}$/.test(zip)) {
+      warnings.push({ field: 'Zip Code', msg: `Philippines ZIP codes should be 4 digits — "${zip}" may be incorrect` });
+    }
+    if ((c.includes('united states') || c === 'us' || c === 'usa') && !/^\d{5}(-\d{4})?$/.test(zip)) {
+      warnings.push({ field: 'Zip Code', msg: `US ZIP codes should be 5 digits — "${zip}" may be incorrect` });
+    }
+  }
+
+  // ── Scrap Order Items ──────────────────────────
+  const oRows = document.querySelectorAll('#orderRows tr');
+  if (oRows.length === 0) {
+    issues.push({ field: 'Scrap Order Details', msg: 'At least one item is required' });
+  } else {
+    let rowNum = 0;
+    oRows.forEach(r => {
+      rowNum++;
+      const inputs = r.querySelectorAll('input');
+      if (inputs.length < 4) return;
+      const desc  = inputs[1].value.trim();
+      const qty   = parseFloat(inputs[2].value) || 0;
+      const price = parseFloat(inputs[3].value) || 0;
+      if (!desc) issues.push({ field: `Order Row ${rowNum}`, msg: 'Description is required' });
+      if (qty === 0) issues.push({ field: `Order Row ${rowNum}`, msg: 'Quantity must be greater than 0' });
+      if (price === 0) warnings.push({ field: `Order Row ${rowNum}`, msg: 'Unit price is 0 — confirm this is correct' });
+      // Amount consistency
+      const amtEl = r.querySelector('[id^="amt_"]');
+      if (amtEl) {
+        const displayed = parseFloat(amtEl.textContent.replace(/[^0-9.]/g, '')) || 0;
+        const expected  = qty * price;
+        if (Math.abs(displayed - expected) > 0.01) {
+          corrections.push({ field: `Order Row ${rowNum} Amount`, msg: `Recalculated: ${sym}${expected.toFixed(2)}` });
+        }
+      }
+    });
+  }
+
+  // ── Breakdown Info ─────────────────────────────
+  const bRma      = v('bRma');
+  const tracking  = v('trackingNum');
+  const retDate   = v('returnDate');
+
+  if (!tracking) issues.push({ field: 'Tracking Number', msg: 'Required — cannot be empty' });
+  if (!retDate)  issues.push({ field: 'Return Date',     msg: 'Required — cannot be empty' });
+
+  // RMA consistency
+  if (rma && bRma && rma !== bRma) {
+    warnings.push({ field: 'RMA Consistency', msg: `Invoice RMA "${rma}" does not match Breakdown RMA "${bRma}"` });
+  }
+
+  // Breakdown rows
+  const bRows = document.querySelectorAll('#breakdownRows tr');
+  if (bRows.length > 0) {
+    let bNum = 0;
+    bRows.forEach(r => {
+      bNum++;
+      const inputs = r.querySelectorAll('input');
+      if (inputs.length < 3) return;
+      const ser  = inputs[1].value.trim();
+      const desc = inputs[2].value.trim();
+      if (!ser)  warnings.push({ field: `Breakdown Row ${bNum}`, msg: 'Serial number is missing' });
+      if (!desc) issues.push({ field: `Breakdown Row ${bNum}`, msg: 'Description is required' });
+    });
+  }
+
+  return { issues, warnings, corrections };
+}
+
+/* ═══════════════════════════════════════════════════
+   VALIDATE & PREVIEW
+═══════════════════════════════════════════════════ */
+function validateAndPreview() {
+  // Basic required check first
+  const quickMissing = [];
+  [
+    ['custName',    'Customer name'],
+    ['custEmail',   'Customer email'],
+    ['custPhone',   'Customer phone'],
+    ['company',     'Company name'],
+    ['rma',         'RMA number'],
+    ['address',     'Invoice address'],
+    ['city',        'City'],
+    ['zip',         'Zip / postal code'],
+    ['country',     'Country'],
+    ['trackingNum', 'Tracking number'],
+    ['returnDate',  'Return date'],
+  ].forEach(([id, lbl]) => { if (!v(id)) quickMissing.push(lbl); });
+
+  const oRows = document.querySelectorAll('#orderRows tr');
+  if (oRows.length === 0) quickMissing.push('At least one scrap order item');
+
+  if (quickMissing.length) {
+    const banner = document.getElementById('errorBanner');
+    document.getElementById('errorList').textContent = ' ' + quickMissing.join(', ') + '.';
+    banner.style.display = 'block';
+    banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  document.getElementById('errorBanner').style.display = 'none';
+
+  // Run full validation
+  const { issues, warnings, corrections } = runValidation();
+  const cur = getCur();
+  const sym = cur.sym;
+
+  // Build modal HTML
+  let html = '';
+
+  // Status banner
+  if (issues.length > 0) {
+    html += `<div class="has-warnings">⚠️ <div><strong>${issues.length} issue(s) found</strong> that must be resolved before printing. Please fix them and validate again.</div></div>`;
+  } else if (warnings.length > 0) {
+    html += `<div class="has-warnings">⚠️ <div><strong>${warnings.length} warning(s) found.</strong> Review them below — you may still proceed to print.</div></div>`;
+  } else {
+    html += `<div class="all-good">✅ <strong>All fields validated successfully. Ready to print.</strong></div>`;
+  }
+
+  // Validation Summary
+  if (issues.length || warnings.length || corrections.length) {
+    html += `<div class="val-section"><div class="val-section-title">Validation Summary</div>`;
+    issues.forEach(i => {
+      html += `<div class="val-item"><span class="val-badge badge-err">ERROR</span><span class="val-err"><strong>${i.field}:</strong> ${i.msg}</span></div>`;
+    });
+    warnings.forEach(w => {
+      html += `<div class="val-item"><span class="val-badge badge-warn">WARNING</span><span class="val-warn"><strong>${w.field}:</strong> ${w.msg}</span></div>`;
+    });
+    corrections.forEach(c => {
+      html += `<div class="val-item"><span class="val-badge badge-ok">FIXED</span><span class="val-ok"><strong>${c.field}:</strong> ${c.msg}</span></div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Structured preview — Invoice
+  html += `<div class="val-section">
+    <div class="val-section-title">📄 Scrap Invoice Preview — Page 1</div>
+    <dl class="preview-kv">
+      <dt>Full Name</dt>       <dd>${v('custName')}</dd>
+      <dt>Email</dt>           <dd>${v('custEmail')}</dd>
+      <dt>Phone</dt>           <dd>${v('custPhone')}</dd>
+      <dt>Company</dt>         <dd>${v('company')}</dd>
+      <dt>RMA #</dt>           <dd>${v('rma')}</dd>
+      <dt>Address</dt>         <dd>${v('address')}</dd>
+      <dt>City</dt>            <dd>${v('city')}</dd>
+      <dt>State / Region</dt>  <dd>${v('state') || '—'}</dd>
+      <dt>Zip Code</dt>        <dd>${v('zip')}</dd>
+      <dt>Country</dt>         <dd>${v('country')}</dd>
+    </dl>
+    <table class="preview-table" style="margin-top:10px;">
+      <thead><tr><th>Item No.</th><th>Description</th><th>Qty</th><th>Unit Price</th><th>Amount</th></tr></thead>
+      <tbody>`;
+
+  let grandTotal = 0;
+  document.querySelectorAll('#orderRows tr').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    if (inputs.length < 4) return;
+    const no    = inputs[0].value.trim() || '—';
+    const desc  = inputs[1].value.trim() || '—';
+    const qty   = parseFloat(inputs[2].value) || 0;
+    const price = parseFloat(inputs[3].value) || 0;
+    const amt   = qty * price;
+    grandTotal += amt;
+    html += `<tr><td>${no}</td><td>${desc}</td><td>${qty}</td><td>${sym}${price.toFixed(2)}</td><td>${sym}${amt.toFixed(2)}</td></tr>`;
+  });
+  html += `</tbody><tfoot><tr class="preview-total-row"><td colspan="4" style="text-align:right;">TOTAL AMOUNT</td><td>${sym}${grandTotal.toFixed(2)}</td></tr></tfoot>
+    </table>
+  </div>`;
+
+  // Structured preview — Breakdown
+  html += `<div class="val-section">
+    <div class="val-section-title">📋 Breakdown of Items Preview — Page 2</div>
+    <dl class="preview-kv">
+      <dt>RMA #</dt>            <dd>${v('bRma') || v('rma')}</dd>
+      <dt>Tracking Number</dt>  <dd>${v('trackingNum')}</dd>
+      <dt>Return Date</dt>      <dd>${formatDate(v('returnDate'))}</dd>
+    </dl>
+    <table class="preview-table" style="margin-top:10px;">
+      <thead><tr><th>Item No.</th><th>Serial No.</th><th>Description</th><th>Comments</th></tr></thead>
+      <tbody>`;
+
+  document.querySelectorAll('#breakdownRows tr').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    const ta     = r.querySelector('textarea');
+    if (inputs.length < 3) return;
+    const no   = inputs[0].value.trim() || '—';
+    const ser  = inputs[1].value.trim() || '—';
+    const desc = inputs[2].value.trim() || '—';
+    const comm = ta?.value.trim() || '—';
+    html += `<tr><td>${no}</td><td>${ser}</td><td>${desc}</td><td>${comm}</td></tr>`;
+  });
+  html += `</tbody></table>`;
+
+  // Scrap totals
+  html += `<table class="preview-table" style="margin-top:10px;">
+    <thead><tr><th>Item No.</th><th>Description</th><th>Qty</th></tr></thead><tbody>`;
+  document.querySelectorAll('.scrap-row').forEach(d => {
+    const no   = d.querySelector('[id^="stno_"]')?.value || '—';
+    const desc = d.querySelector('[id^="stdesc_"]')?.value || '—';
+    const qty  = d.querySelector('[id^="stqty_"]')?.value || '—';
+    if (no === '—' && desc === '—') return;
+    html += `<tr><td>${no}</td><td>${desc}</td><td>${qty}</td></tr>`;
+  });
+  html += `</tbody></table></div>`;
+
+  // Action buttons
+  if (issues.length === 0) {
+    html += `<div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Go Back</button>
+      <button class="btn-print" onclick="doPrint()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+        Print / Save as PDF
+      </button>
+    </div>`;
+  } else {
+    html += `<div class="modal-actions">
+      <button class="btn-print" style="background:var(--gray-400);cursor:not-allowed;" disabled>
+        Fix Errors to Enable Print
+      </button>
+      <button class="btn-cancel" onclick="closeModal()">Go Back &amp; Fix</button>
+    </div>`;
+  }
+
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+/* ═══════════════════════════════════════════════════
+   POPULATE PRINT PAGES & PRINT
+═══════════════════════════════════════════════════ */
+function doPrint() {
+  const cur  = getCur();
+  const sym  = cur.sym;
+  const rma  = v('rma');
+  const bRma = v('bRma') || rma;
+  const today = todayFormatted();
+
+  // ── Page 1 ──────────────────────────────────────
+  setText('pr1-rma',     rma);
+  setText('pr1-rma2',    rma);
+  setText('pr1-name',    v('custName'));
+  setText('pr1-email',   v('custEmail'));
+  setText('pr1-phone',   v('custPhone'));
+  setText('pr1-company', v('company'));
+  setText('pr1-address', v('address'));
+  setText('pr1-city',    v('city'));
+  setText('pr1-state',   v('state') || '—');
+  setText('pr1-zip',     v('zip'));
+  setText('pr1-country', v('country'));
+  setText('pr1-date',    today);
+
+  // Order rows
+  let totalAmt = 0;
+  let itemsHtml = '';
+  document.querySelectorAll('#orderRows tr').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    if (inputs.length < 4) return;
+    const no    = inputs[0].value.trim() || '—';
+    const desc  = inputs[1].value.trim() || '—';
+    const qty   = parseFloat(inputs[2].value) || 0;
+    const price = parseFloat(inputs[3].value) || 0;
+    const amt   = qty * price;
+    totalAmt += amt;
+    itemsHtml += `<tr>
+      <td>${no}</td>
+      <td>${desc}</td>
+      <td style="text-align:center;">${qty}</td>
+      <td class="td-right">${sym}${price.toFixed(2)}</td>
+      <td class="td-right">${sym}${amt.toFixed(2)}</td>
+    </tr>`;
+  });
+  document.getElementById('pr1-items').innerHTML = itemsHtml;
+  setText('pr1-total', sym + totalAmt.toFixed(2));
+
+  // ── Page 2 ──────────────────────────────────────
+  setText('pr2-rma',          bRma);
+  setText('pr2-rma2',         bRma);
+  setText('pr2-tracking',     v('trackingNum'));
+  setText('pr2-date',         formatDate(v('returnDate')));
+  setText('pr2-date-footer',  today);
+
+  // Breakdown items
+  let bHtml = '';
+  document.querySelectorAll('#breakdownRows tr').forEach(r => {
+    const inputs = r.querySelectorAll('input');
+    const ta     = r.querySelector('textarea');
+    if (inputs.length < 3) return;
+    const no   = inputs[0].value.trim() || '—';
+    const ser  = inputs[1].value.trim() || '—';
+    const desc = inputs[2].value.trim() || '—';
+    const comm = ta?.value.trim() || 'Scrap';
+    bHtml += `<tr><td>${no}</td><td style="font-family:'Courier New',monospace;font-size:8pt;">${ser}</td><td>${desc}</td><td>${comm}</td></tr>`;
+  });
+  document.getElementById('pr2-items').innerHTML = bHtml || `<tr><td colspan="4" style="color:#9ca3af;">No items entered</td></tr>`;
+
+  // Scrap totals
+  let stHtml = '';
+  document.querySelectorAll('.scrap-row').forEach(d => {
+    const no   = d.querySelector('[id^="stno_"]')?.value?.trim()   || '—';
+    const desc = d.querySelector('[id^="stdesc_"]')?.value?.trim() || '—';
+    const qty  = d.querySelector('[id^="stqty_"]')?.value?.trim()  || '—';
+    if (no === '—' && desc === '—') return;
+    stHtml += `<tr><td>${no}</td><td>${desc}</td><td style="text-align:center;">${qty}</td></tr>`;
+  });
+  document.getElementById('pr2-totals').innerHTML = stHtml || `<tr><td colspan="3" style="color:#9ca3af;">No summary rows entered</td></tr>`;
+
+  // Close modal, print
+  closeModal();
+  setTimeout(() => window.print(), 200);
+}
+
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+/* ═══════════════════════════════════════════════════
+   MODAL
+═══════════════════════════════════════════════════ */
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); }
+
+document.getElementById('modalOverlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ═══════════════════════════════════════════════════
+   RMA SYNC & INIT
+═══════════════════════════════════════════════════ */
+document.getElementById('bRma').addEventListener('input', function() {
+  this._edited = !!this.value;
+});
+document.getElementById('rma').addEventListener('input', syncRma);
+
+addOrderRow();
+addBreakdownRow();
+addScrapTotal();
+</script>
+</body>
+</html>
